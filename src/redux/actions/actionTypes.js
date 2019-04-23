@@ -1,13 +1,10 @@
 /** USER */
 export const SET_USER = 'SET_USER';
-export const ADD_USER = 'ADD_USER';
 export const GET_USERS = 'GET_USERS';
 export const REQUEST_USERS = 'REQUEST_USERS';
 export const RECEIVE_USERS = 'RECEIVE_USERS';
 export const INVALIDATE_USER_LIST = 'INVALIDATE_USER_LIST';
 export const LOGOUT = 'LOGOUT';
-export const SET_TOKEN = 'SET_TOKEN';
-export const DELETE_TOKEN = 'DELETE_TOKEN';
 
 /** CUSTOMERS */
 export const ADD_CUSTOMER = 'ADD_CUSTOMER';

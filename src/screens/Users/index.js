@@ -4,18 +4,25 @@ import { Link } from 'react-router-dom';
 
 import { API_getUsers } from '../../redux/actions/userActions';
 import Table from '../../_components/Table';
+import Logout from '../../_components/Logout';
 
 class Users extends Component {
     componentDidMount() {
-        const { admin, logged, getUsers, history: { push }, token } = this.props;
-        if (!admin || !logged) {
+        const { getUsers, history: { push } } = this.props;
+        const token = window.localStorage.getItem('x-token');
+        const admin = window.localStorage.getItem('x-admin');
+        if (admin === 'false') {
+            window.localStorage.clear();
             return push('login');
+        } else {
+            getUsers(token)
+                .catch((err) => {
+                    if (err.status === 401) {
+                        window.localStorage.clear();
+                        return push('login');
+                    }
+                });
         }
-        getUsers(token).then((res) => {
-            if (res.error === 'Invalid token') {
-                return push('login');
-            }
-        });
     }
 
     componentDidUpdate(prevProps) {
@@ -23,15 +30,16 @@ class Users extends Component {
             this.props.getUsers(this.props.token);
         }
     }
-    
+
     render() {
         const {
-            users, isFetching, didInvalidate, match } = this.props;
+            users, isFetching, didInvalidate, match, history } = this.props;
         return (
             <div>
                 <h1>Users</h1>
                 <Link to="/customers">Customers</Link>
                 <Link to="/users/new">New User</Link>
+                <Logout history={history}/>
                 {
                     isFetching && <h3>Loading</h3>
                 }

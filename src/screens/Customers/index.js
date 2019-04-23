@@ -4,25 +4,27 @@ import { Link } from 'react-router-dom';
 
 import { API_getCustomers } from '../../redux/actions/customerAction';
 import Table from '../../_components/Table';
+import Logout from '../../_components/Logout';
 
 class Customers extends Component {
     componentDidMount() {
-        const { token, logged, getCustomers, history: { push } } = this.props;
-        if (!logged) {
-            return push('login');
-        }
-        getCustomers(token).then((res) => {
-            if (res.error === 'Invalid token') {
+        const { getCustomers, history: { push } } = this.props;
+        const token = window.localStorage.getItem('x-token');
+        getCustomers(token).catch((err) => {
+            if (err.status === 401) {
+                window.localStorage.clear();
                 return push('login');
             }
         });
     }
 
     componentDidUpdate(prevProps) {
-        const { didInvalidate, token, getCustomers, history: { push } } = this.props;
+        const { didInvalidate, getCustomers, history: { push } } = this.props;
+        const token = window.localStorage.getItem('x-token');
         if (didInvalidate && didInvalidate !== prevProps.didInvalidate) {
-            getCustomers(token).then((res) => {
-                if (res.error === 'Invalid token') {
+            getCustomers(token).catch((err) => {
+                if (err.status === 401) {
+                    window.localStorage.clear();
                     return push('login');
                 }
             });
@@ -30,7 +32,8 @@ class Customers extends Component {
     }
 
     render() {
-        const { customers, isFetching, didInvalidate, location, admin } = this.props;
+        const { customers, isFetching, didInvalidate, location, history } = this.props;
+        const admin = window.localStorage.getItem('x-admin');
         let headers;
         if (customers && customers.length > 0) {
             headers = Object.keys(customers[0]);
@@ -39,8 +42,9 @@ class Customers extends Component {
         return (
             <div>
                 <h1>Customers</h1>
-                {admin && <Link to="/users">Users</Link>}
+                {admin && admin === 'true' && <Link to="/users">Users</Link>}
                 <Link to="/customers/new">New Customer</Link>
+                <Logout history={history}/>
                 {
                     isFetching && <h3>Loading</h3>
                 }
@@ -52,7 +56,7 @@ class Customers extends Component {
     }
 }
 
-function mapStateToProps({ customerReducer, userReducer: { logged, admin, token } }) {
+function mapStateToProps({ customerReducer}) {
     const {
         list, isFetching, didInvalidate
     } = customerReducer;
@@ -60,9 +64,6 @@ function mapStateToProps({ customerReducer, userReducer: { logged, admin, token 
         customers: list,
         isFetching,
         didInvalidate,
-        logged,
-        admin,
-        token,
     };
 }
 

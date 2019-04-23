@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import API from '../services/Api';
-import { setUser, setToken } from '../redux/actions/userActions';
+import { setUser } from '../redux/actions/userActions';
 
 class Login extends Component {
     state = {
@@ -18,7 +18,8 @@ class Login extends Component {
             .then((res) => {
                 if (res.status === 'OK') {
                     this.props.setUser(res.user);
-                    this.props.setToken(res.token);
+                    window.localStorage.setItem('x-token', res.token);
+                    window.localStorage.setItem('x-admin', res.user.admin);
                     if (res.user.admin) {
                         this.props.history.push('/users');
                     } else {
@@ -41,7 +42,8 @@ class Login extends Component {
                     this.setState({ message: res.errorMessage });
                 } else {
                     this.props.setUser(res.user);
-                    this.props.setToken(res.token);
+                    window.localStorage.setItem('x-token', res.token);
+                    window.localStorage.setItem('x-admin', false);
                     this.props.history.push('/customers');
                 }
             })
@@ -74,7 +76,6 @@ class Login extends Component {
 function mapDispatchToProps(dispatch) {
     return {
         setUser: user => dispatch(setUser(user)),
-        setToken: user => dispatch(setToken(user)),
     };
 }
 

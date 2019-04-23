@@ -4,9 +4,6 @@ const initialState = {
     user: {},
     list: {},
     total: 0,
-    token: '',
-    logged: false,
-    admin: false,
     didInvalidate: true,
     isFetching: false,
 };
@@ -18,8 +15,6 @@ export default function reducer(state = initialState, action) {
         newState = {
             ...state,
             user: action.user,
-            admin: action.user.admin,
-            logged: true,
         };
         return newState;
 
@@ -32,17 +27,6 @@ export default function reducer(state = initialState, action) {
 
     case types.LOGOUT:
         newState = initialState;
-        return newState;
-
-    case types.ADD_USER:
-        if (!state.list[action.id]) {
-            const list = state.list;
-            list[action.id] = 'asd';
-            newState = {
-                ...state,
-                list,
-            }
-        }
         return newState;
 
     case types.REQUEST_USERS:
@@ -66,20 +50,6 @@ export default function reducer(state = initialState, action) {
         newState = {
             ...state,
             didInvalidate: true,
-        }
-        return newState;
-
-    case types.SET_TOKEN:
-        newState = {
-            ...state,
-            token: action.token,
-        }
-        return newState;
-
-    case types.DELETE_TOKEN: 
-        newState = {
-            ...state,
-            token: '',
         }
         return newState;
 

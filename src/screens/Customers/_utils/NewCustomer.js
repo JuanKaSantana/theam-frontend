@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
 
 import API from '../../../services/Api';
 
@@ -18,9 +17,11 @@ class NewCustomer extends Component {
     }
 
     componentDidMount() {
-        const { token, history: { replace } } = this.props;
+        const { history: { replace } } = this.props;
+        const token = window.localStorage.getItem('x-token');
         API.get('auth/secure', token).catch((err) => {
             if (err.status === 401) {
+                window.localStorage.clear();
                 return replace('/login');
             }
         });
@@ -35,14 +36,15 @@ class NewCustomer extends Component {
     handlePhotoChange = image => this.setState({ image });
 
     saveImage = () => {
-        const { token } = this.props;
+        const token = window.localStorage.getItem('x-token');
         const { customer: { id }, image } = this.state;
         return API.post('images/upload', { id, image }, {}, token);
     };
 
     save = () => {
+        const token = window.localStorage.getItem('x-token');
         const { customer, image } = this.state;
-        const { history: { goBack }, token } = this.props;
+        const { history: { goBack } } = this.props;
         this.setState({ loading: true });
         API.post('customers', { customer }, {}, token)
             .then(() => {
@@ -94,10 +96,4 @@ class NewCustomer extends Component {
     }
 }
 
-function mapStateToProps({ userReducer: { token } }) {
-    return {
-        token,
-    };
-}
-
-export default connect(mapStateToProps, null)(NewCustomer);
+export default NewCustomer;
