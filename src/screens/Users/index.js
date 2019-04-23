@@ -53,15 +53,12 @@ class Users extends Component {
 
 function mapStateToProps({ userReducer }) {
     const {
-        list, isFetching, didInvalidate, logged, admin, token,
+        list, isFetching, didInvalidate
     } = userReducer;
     return {
         users: list,
         isFetching,
         didInvalidate,
-        logged,
-        admin,
-        token,
     };
 }
 
