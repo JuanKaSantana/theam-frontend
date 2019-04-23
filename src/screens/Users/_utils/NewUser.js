@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
 
 import API from '../../../services/Api';
 
@@ -15,9 +14,17 @@ class NewUser extends Component {
     }
 
     componentDidMount() {
-        const { token, history: { replace } } = this.props;
+        const token = window.localStorage.getItem('x-token');
+        const admin = window.localStorage.getItem('x-admin');
+        const { history: { replace } } = this.props;
+        
+        if (admin === 'false') {
+            window.localStorage.clear();
+            return replace('/login');
+        }
         API.get('auth/secure', token).catch((err) => {
             if (err.status === 401) {
+                window.localStorage.clear();
                 return replace('/login');
             }
         });
@@ -30,8 +37,9 @@ class NewUser extends Component {
     };
 
     save = () => {
+        const token = window.localStorage.getItem('x-token');
         const { user } = this.state;
-        const { history: { goBack }, token } = this.props;
+        const { history: { goBack } } = this.props;
         this.setState({ loading: true });
         API.post('users', { user }, {}, token)
             .then(() => goBack())
@@ -65,10 +73,4 @@ class NewUser extends Component {
     }
 }
 
-function mapStateToProps({ userReducer: { token } }) {
-    return {
-        token,
-    };
-}
-
-export default connect(mapStateToProps, null)(NewUser);
+export default NewUser;

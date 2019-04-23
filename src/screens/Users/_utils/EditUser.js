@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
 
 import API from '../../../services/Api';
 
@@ -15,10 +14,19 @@ class EditUser extends Component {
     }
 
     componentDidMount() {
-        const { history: { replace },match: { params: { id } }, token } = this.props;
+        const token = window.localStorage.getItem('x-token');
+        const admin = window.localStorage.getItem('x-admin');
+        const { history: { replace },match: { params: { id } } } = this.props;
+        
+        if (admin === 'false') {
+            window.localStorage.clear();
+            return replace('/login');
+        }
+
         API.get(`users/search/${id}`, token)
             .then((res) => {
                 if (res.error) {
+                    window.localStorage.clear();
                     return replace('/login');
                 }
                 this.setState({ loading: false, user: res.user });
@@ -40,8 +48,9 @@ class EditUser extends Component {
     }
 
     save = () => {
+        const token = window.localStorage.getItem('x-token');
         const { user } = this.state;
-        const { history: { goBack }, token } = this.props;
+        const { history: { goBack } } = this.props;
         this.setState({ loading: true });
         API.put('users', { id: user._id, changeValues: user }, token)
             .then(() => goBack())
@@ -79,10 +88,4 @@ class EditUser extends Component {
     }
 }
 
-function mapStateToProps({ userReducer: { token } }) {
-    return {
-        token,
-    };
-}
-
-export default connect(mapStateToProps, null)(EditUser);
+export default EditUser;

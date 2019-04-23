@@ -14,19 +14,7 @@ export function invalidateList() {
 }
 
 export function setUser(user) {
-    return { type: types.SET_USER, user, admin: user.admin };
-}
-
-export function logout() {
-    return { type: types.LOGOUT };
-}
-
-export function setToken(token) {
-    return { type: types.SET_TOKEN, token };
-}
-
-export function deleteToken() {
-    return { type: types.DELETE_TOKEN };
+    return { type: types.SET_USER, user };
 }
 
 export function API_getUsers(token) {

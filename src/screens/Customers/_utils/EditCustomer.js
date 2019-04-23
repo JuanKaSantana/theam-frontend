@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
 
 import API from '../../../services/Api';
 import ImageUploader from '../../../_components/ImageUploader';
@@ -17,8 +16,8 @@ class EditCustomer extends Component {
     }
 
     componentDidMount() {
-        const { history: { replace }, match: { params: { id } }, token } = this.props;
-            
+        const { history: { replace }, match: { params: { id } } } = this.props;
+        const token = window.localStorage.getItem('x-token');
         API.get(`customers/search/${id}`, token)
             .then((res) => {
                 const { customer } = res;
@@ -31,6 +30,7 @@ class EditCustomer extends Component {
             })
             .catch((err) => {
                 if (err.status === 401) {
+                    window.localStorage.clear();
                     return replace('/login');
                 }
                 this.setState({ loading: false, error: true })
@@ -44,14 +44,15 @@ class EditCustomer extends Component {
     };
 
     saveImage = (image) => {
-        const { token } = this.props;
+        const token = window.localStorage.getItem('x-token');
         const { customer: { id } } = this.state;
         return API.post('images/upload', { id, image }, {}, token);
     };
 
     save = () => {
         const { customer } = this.state;
-        const { history: { goBack }, token } = this.props;
+        const { history: { goBack } } = this.props;
+        const token = window.localStorage.getItem('x-token');
         this.setState({ loading: true });
         API.put('customers', { id: customer._id, changeValues: customer }, token)
             .then(() => goBack())
@@ -97,11 +98,4 @@ class EditCustomer extends Component {
         );
     }
 }
-
-function mapStateToProps({ userReducer: { token } }) {
-    return {
-        token,
-    };
-}
-
-export default connect(mapStateToProps, null)(EditCustomer);
+export default EditCustomer;

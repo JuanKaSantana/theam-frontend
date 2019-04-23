@@ -22,7 +22,7 @@ class ListElement extends Component {
     }
 
     downloadImage = (id) => {
-        const { token } = this.props;
+        const token = window.localStorage.getItem('x-token');
         return API.get(`images/download/${id}`, token)
             .then(res => res[0].image);
     };
@@ -37,7 +37,7 @@ class ListElement extends Component {
     }
 
     onClick = (from, id) => {
-        const { token } = this.props;
+        const token = window.localStorage.getItem('x-token');
         const secure = window.confirm('Are you sure that you want to delete this user?');
         if (secure) {
             API.delete(`${from.substring(1)}/${id}`, token)
@@ -82,12 +82,6 @@ class ListElement extends Component {
     }
 }
 
-function mapStateToProps({ userReducer: { token } }) {
-    return {
-        token,
-    };
-}
-
 function mapDispatchToProps(dispatch) {
     return {
         invalidateCustomerList: () => dispatch(invalidateCustomerList()),
@@ -95,4 +89,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ListElement);
+export default connect(null, mapDispatchToProps)(ListElement);
