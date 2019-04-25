@@ -1,13 +1,11 @@
-FROM node:8.7
+FROM mhart/alpine-node:8.11.4
 
 WORKDIR /usr/src/theam-frontend
 
-COPY package.json ./package.json
-
-COPY package-lock.json ./package-lock.json
+COPY package*.json /client/
 
 RUN npm install
 
-EXPOSE 80
+EXPOSE 3000
 
 CMD ["npm", "start"]
