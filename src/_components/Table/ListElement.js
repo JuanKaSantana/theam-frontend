@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import c from 'classnames';
 
 import API from '../../services/Api';
@@ -24,19 +25,20 @@ class ListElement extends Component {
     downloadImage = (id) => {
         const token = window.localStorage.getItem('x-token');
         return API.get(`images/download/${id}`, token)
-            .then(res => res[0].image);
+            .then(res => _.get(res[0], 'image', null));
     };
 
     getImage = () => {
         const { image, loading } = this.state;
         if (image && !loading) {
-            return <img src={image} style={{ width: 50, height: 50 }} />;
+            return <td><img src={image} alt="Customer" style={{ width: 50, height: 50 }} /></td>;
         } else {
-            return <div style={{ width: 50, height: 50 }}>None</div>;
+            return <td><div style={{ width: 50, height: 50 }}>None</div></td>;
         }
     }
 
     onClick = (from, id) => {
+        const { invalidateCustomerList, invalidateUserList } = this.props;
         const token = window.localStorage.getItem('x-token');
         const secure = window.confirm('Are you sure that you want to delete this user?');
         if (secure) {
@@ -65,9 +67,9 @@ class ListElement extends Component {
                 {
                     Object.keys(singleData).map((key) => {
                         if (key === 'admin') {
-                            return <td className={c('td')}>{singleData[key].toString()}</td>;
+                            return <td key={`${from}-${key}`} className={c('td')}>{!!singleData[key] ? "true" : "false"}</td>;
                         } else if (key !== '_id' && key !== 'password') {
-                            return <td className={c('td')}>{singleData[key]}</td>;
+                            return <td key={`${from}-${key}`} className={c('td')}>{singleData[key]}</td>;
                         } else {
                             return null;
                         }

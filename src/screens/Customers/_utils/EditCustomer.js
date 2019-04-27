@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import _ from 'lodash';
 
 import API from '../../../services/Api';
 import ImageUploader from '../../../_components/ImageUploader';
@@ -24,7 +25,7 @@ class EditCustomer extends Component {
                 let image = null;
                 API.get(`images/download/${customer.id}`, token)
                     .then((result) => {
-                        image = result[0].image;
+                        image = _.get(result[0], 'image', null);
                         this.setState({ loading: false, customer, image })
                     });
             })

@@ -5,7 +5,7 @@ import ListElement from './ListElement';
 const Body = ({ data, from }) => (
     <tbody className={c('tbody')}>
         {
-            data.map(singleData => <ListElement singleData={singleData} from={from} />)
+            data.map(singleData => <ListElement key={singleData._id} singleData={singleData} from={from} />)
         }
     </tbody>
 );

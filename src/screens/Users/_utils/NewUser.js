@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import API from '../../../services/Api';
+import statusErrorHandler from '../../../_helper/statusErrorHandler';
 
 class NewUser extends Component {
     constructor(props) {
@@ -43,7 +44,7 @@ class NewUser extends Component {
         this.setState({ loading: true });
         API.post('users', { user }, {}, token)
             .then(() => goBack())
-            .catch(() => goBack());
+            .catch(err => this.setState({ error: statusErrorHandler(err.status), loading: false }));
     }
 
 
@@ -52,8 +53,6 @@ class NewUser extends Component {
         return (
             <div>
                 NEW USER
-                { loading && <span>Loading</span> }
-                { error && <span>Error while getting user info</span> }
                 <div>
                     <div>
                         <label>Email</label>
@@ -64,10 +63,12 @@ class NewUser extends Component {
                         <input type="password" onChange={e => this.changeField('password')(e)} value={user.password || ''} />
                     </div>
                     <div>
-                        <button onClick={this.save}>Save</button>
+                        <button onClick={this.save} disabled={!user.email || !user.password}>Save</button>
                         <Link to="/users">Back</Link>
                     </div>
                 </div>
+                { loading && <span>Loading</span> }
+                { error && <span>{error}</span> }
             </div>
         );
     }

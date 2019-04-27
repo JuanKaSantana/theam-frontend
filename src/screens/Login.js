@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import API from '../services/Api';
+import statusErrorHandler from '../_helper/statusErrorHandler';
 import { setUser } from '../redux/actions/userActions';
 
 class Login extends Component {
@@ -12,42 +13,48 @@ class Login extends Component {
 
     handleFieldChange = field => e => this.setState({ [field]: e.target.value });
 
+    validateEmail = (email) => {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
+
     login = () => {
         const { email, password } = this.state;
+        if (!this.validateEmail(email)) {
+            return this.setState({ message: 'Invalid email' });
+        }
         API.post('auth/login', { email, password })
             .then((res) => {
-                if (res.status === 'OK') {
-                    this.props.setUser(res.user);
-                    window.localStorage.setItem('x-token', res.token);
-                    window.localStorage.setItem('x-admin', res.user.admin);
-                    if (res.user.admin) {
-                        this.props.history.push('/users');
-                    } else {
-                        this.props.history.push('/customers');
-                    }
+                this.props.setUser(res.user);
+                window.localStorage.setItem('x-token', res.token);
+                window.localStorage.setItem('x-admin', res.user.admin);
+                if (res.user.admin) {
+                    this.props.history.push('/users');
                 } else {
-                    this.setState({ message: res.errorMessage });
+                    this.props.history.push('/customers');
                 }
-
             })
-            .catch((err) => console.log('err', err));
+            .catch((err) => {
+                this.setState({ message: statusErrorHandler(err.status) });
+            });
     }
 
     signup = () => {
         const { email, password } = this.state;
         const user = { email, password };
+        if (!this.validateEmail(email)) {
+            return this.setState({ message: 'Invalid email' });
+        }
         API.post('auth/signup', { user })
             .then((res) => {
-                if (res.errorMessage) {
-                    this.setState({ message: res.errorMessage });
-                } else {
-                    this.props.setUser(res.user);
-                    window.localStorage.setItem('x-token', res.token);
-                    window.localStorage.setItem('x-admin', false);
-                    this.props.history.push('/customers');
-                }
+                this.props.setUser(res.user);
+                window.localStorage.setItem('x-token', res.token);
+                window.localStorage.setItem('x-admin', false);
+                this.props.history.push('/customers');
             })
-            .catch((err) => console.log('err', err));
+            .catch((err) => {
+                this.setState({ message: statusErrorHandler(err.status) });
+            });
     }
 
     render() {
@@ -56,16 +63,16 @@ class Login extends Component {
             <div>
                 <div>
                     <label>Email</label>
-                    <input type="text" onChange={e => this.handleFieldChange('email')(e)} value={email} />
+                    <input type="email" onChange={e => this.handleFieldChange('email')(e)} value={email} />
                 </div>
                 <div>
                     <label>Password</label>
                     <input type="password" onChange={e => this.handleFieldChange('password')(e)} value={password} />
                 </div>
                 <div>
-                    <input type="button" onClick={this.login} value="Log in" />
+                    <input type="button" onClick={this.login} value="Log in" disabled={!email || !password} />
                     o
-                    <input type="button" onClick={this.signup} value="Sign up" />
+                    <input type="button" onClick={this.signup} value="Sign up" disabled={!email || !password} />
                 </div>
                 {message && <span>{message}</span>}
             </div>
