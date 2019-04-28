@@ -55,7 +55,7 @@ class EditCustomer extends Component {
         const { history: { goBack } } = this.props;
         const token = window.localStorage.getItem('x-token');
         this.setState({ loading: true });
-        API.put('customers', { id: customer._id, changeValues: customer }, token)
+        API.put('customers', { id: customer.id, changeValues: customer }, token)
             .then(() => goBack())
             .catch(() => goBack());
     }
@@ -64,22 +64,20 @@ class EditCustomer extends Component {
     render() {
         const { customer, loading, error, image } = this.state;
         return (
-            <div>
-                EDIT
-                {loading && <span>Loading</span>}
-                {error && <span>Error while getting customer info</span>}
+            <div className="container">
+                <h1 className="page-header">Edit Customer</h1>
                 {
                     customer && Object.keys(customer).length > 0 && (
-                        <div>
-                            <div>
+                        <div className="form-container">
+                            <div className="input-container">
                                 <label>Id</label>
-                                <input type="text" onChange={e => this.changeField('id')(e)} value={customer.id} />
+                                <input type="text" value={customer.id} disabled/>
                             </div>
-                            <div>
+                            <div className="input-container">
                                 <label>Name</label>
                                 <input type="text" onChange={e => this.changeField('name')(e)} value={customer.name} />
                             </div>
-                            <div>
+                            <div className="input-container">
                                 <label>Surname</label>
                                 <input type="text" onChange={e => this.changeField('surname')(e)} value={customer.surname} />
                             </div>
@@ -89,12 +87,14 @@ class EditCustomer extends Component {
                                 )
                             }
                             <div>
-                                <button onClick={this.save}>Save</button>
-                                <Link to="/customers">Back</Link>
+                                <button className="button save" onClick={this.save}>Save</button>
+                                <Link to="/customers" className="button back">Back</Link>
                             </div>
                         </div>
                     )
                 }
+                {loading && <span>Loading</span>}
+                {error && <span>Error while getting customer info</span>}
             </div>
         );
     }

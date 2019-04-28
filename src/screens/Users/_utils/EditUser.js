@@ -61,28 +61,28 @@ class EditUser extends Component {
     render() {
         const { user, loading, error } = this.state;
         return (
-            <div>
-                EDIT
-                { loading && <span>Loading</span> }
-                { error && <span>Error while getting user info</span> }
+            <div className="container">
+                <h1 className="page-header">Edit User</h1>
                 {
                     user && Object.keys(user).length > 0 && (
-                        <div>
-                            <div>
+                        <div className="form-container">
+                            <div className="input-container">
                                 <label>Email</label>
                                 <input type="text" onChange={e => this.changeField('email')(e)} value={user.email} />
                             </div>
-                            <div>
+                            <div className="input-container">
                                 <label>Admin</label>
                                 <input type="checkbox" onChange={this.handleAdminChange} checked={user.admin} />
                             </div>
                             <div>
-                                <button onClick={this.save}>Save</button>
-                                <Link to="/users">Back</Link>
+                                <button className="button save" onClick={this.save}>Save</button>
+                                <Link to="/users" className="button back">Back</Link>
                             </div>
                         </div>
                     )
                 }
+                { loading && <span>Loading</span> }
+                { error && <span>Error while getting user info</span> }
             </div>
         );
     }

@@ -31,9 +31,9 @@ class ListElement extends Component {
     getImage = () => {
         const { image, loading } = this.state;
         if (image && !loading) {
-            return <td><img src={image} alt="Customer" style={{ width: 50, height: 50 }} /></td>;
+            return <td><img src={image} className="image" alt="Customer" /></td>;
         } else {
-            return <td><div style={{ width: 50, height: 50 }}>None</div></td>;
+            return <td>None</td>;
         }
     }
 
@@ -60,7 +60,7 @@ class ListElement extends Component {
             return <tr><td>Loading</td></tr>
         }
         return (
-            <tr className={c('tr')}>
+            <tr>
                 {
                     from.includes('customers') && this.getImage()
                 }
@@ -68,16 +68,16 @@ class ListElement extends Component {
                     Object.keys(singleData).map((key) => {
                         if (key === 'admin') {
                             return <td key={`${from}-${key}`} className={c('td')}>{!!singleData[key] ? "true" : "false"}</td>;
-                        } else if (key !== '_id' && key !== 'password') {
+                        } else if (key !== '_id' && key !== 'password') { 
                             return <td key={`${from}-${key}`} className={c('td')}>{singleData[key]}</td>;
                         } else {
                             return null;
                         }
                     })
                 }
-                <td className={c('td')}>
-                    <Link to={`${from}/edit/${singleData._id}`}>Edit</Link>
-                    <button onClick={() => this.onClick(from, singleData._id)}>Delete</button>
+                <td className={c('action-container')}>
+                    <Link className="button edit" to={`${from}/edit/${singleData._id}`}>Edit</Link>
+                    <button className="button delete" onClick={() => this.onClick(from, singleData._id)}>Delete</button>
                 </td>
             </tr>
         );

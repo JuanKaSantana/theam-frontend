@@ -7,7 +7,7 @@ const Logout = ({ history: { replace } }) => {
     }
     return (
         <div>
-            <button onClick={handleClick}>Logout</button>
+            <button className="button delete logout" onClick={handleClick}>Logout</button>
         </div>
     )
 }

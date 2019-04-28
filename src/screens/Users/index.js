@@ -10,24 +10,40 @@ class Users extends Component {
     componentDidMount() {
         const { getUsers, history: { push } } = this.props;
         const token = window.localStorage.getItem('x-token');
+        if (this.checkAdmin()) {
+            getUsers(token)
+            .catch((err) => {
+                if (err.status === 401) {
+                    window.localStorage.clear();
+                    return push('login');
+                }
+            });
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        const token = window.localStorage.getItem('x-token');
+        if (this.props.didInvalidate && this.props.didInvalidate !== prevProps.didInvalidate) {
+            if (this.checkAdmin()) {
+                this.props.getUsers(token)
+                .catch((err) => {
+                    if (err.status === 401) {
+                        window.localStorage.clear();
+                        return this.props.history.push('login');
+                    }
+                });
+            }
+        }
+    }
+
+    checkAdmin = () => {
+        const { history: { push } } = this.props;
         const admin = window.localStorage.getItem('x-admin');
         if (admin === 'false') {
             window.localStorage.clear();
             return push('login');
         } else {
-            getUsers(token)
-                .catch((err) => {
-                    if (err.status === 401) {
-                        window.localStorage.clear();
-                        return push('login');
-                    }
-                });
-        }
-    }
-
-    componentDidUpdate(prevProps) {
-        if (this.props.didInvalidate && this.props.didInvalidate !== prevProps.didInvalidate) {
-            this.props.getUsers(this.props.token);
+            return true;
         }
     }
 
@@ -35,10 +51,10 @@ class Users extends Component {
         const {
             users, isFetching, didInvalidate, match, history } = this.props;
         return (
-            <div>
-                <h1>Users</h1>
-                <Link to="/customers">Customers</Link>
-                <Link to="/users/new">New User</Link>
+            <div className="container">
+                <h1 className="page-header">Users</h1>
+                <Link className="button link" to="/customers">Customers</Link>
+                <Link className="button link" to="/users/new">New User</Link>
                 <Logout history={history}/>
                 {
                     isFetching && <h3>Loading</h3>
