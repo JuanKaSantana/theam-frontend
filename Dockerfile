@@ -1,11 +1,20 @@
-FROM mhart/alpine-node:8.11.4
+FROM node:6.3.1
 
-WORKDIR /usr/src/theam-frontend
+# Create theam-frontend directory
+RUN mkdir -p /src/theam-frontend
+WORKDIR /src/theam-frontend
 
-COPY package*.json ./
-
+# Install theam-frontend dependencies
+COPY package.json /src/theam-frontend/
 RUN npm install
+
+# Bundle theam-frontend source
+COPY . /src/theam-frontend
+
+# Build and optimize react theam-frontend
+RUN npm run build
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+# defined in package.json
+CMD [ "npm", "start" ]
