@@ -1,20 +1,13 @@
-FROM node:6.3.1
+FROM node:9.5.0
 
-# Create theam-frontend directory
-RUN mkdir -p /src/theam-frontend
-WORKDIR /src/theam-frontend
+WORKDIR /usr/src/app
 
-# Install theam-frontend dependencies
-COPY package.json /src/theam-frontend/
+COPY package*.json .
+
 RUN npm install
 
-# Bundle theam-frontend source
-COPY . /src/theam-frontend
-
-# Build and optimize react theam-frontend
-RUN npm run build
+COPY . .
 
 EXPOSE 3000
 
-# defined in package.json
-CMD [ "npm", "start" ]
+ENTRYPOINT ["npm", "start"]
