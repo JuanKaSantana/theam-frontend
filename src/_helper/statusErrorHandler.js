@@ -1,5 +1,4 @@
 export default function statusErrorHandler(status) {
-    console.log('status', status);
     switch (status) {
         case 400:
             return 'Some fields are required';

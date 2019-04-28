@@ -60,21 +60,23 @@ class Login extends Component {
     render() {
         const { email, password, message } = this.state;
         return (
-            <div>
-                <div>
-                    <label>Email</label>
-                    <input type="email" onChange={e => this.handleFieldChange('email')(e)} value={email} />
+            <div className="container">
+                <h1 className="page-header">Login</h1>
+                <div className="form-container">
+                    <div className="input-container">
+                        <label>Email</label>
+                        <input type="email" onChange={e => this.handleFieldChange('email')(e)} value={email} />
+                    </div>
+                    <div className="input-container">
+                        <label>Password</label>
+                        <input type="password" onChange={e => this.handleFieldChange('password')(e)} value={password} />
+                    </div>
+                    <div className="input-container">
+                        <input type="button" className="button save" onClick={this.login} value="Log in" disabled={!email || !password} />
+                        <input type="button" className="button edit" onClick={this.signup} value="Sign up" disabled={!email || !password} />
+                    </div>
+                    {message && <span>{message}</span>}
                 </div>
-                <div>
-                    <label>Password</label>
-                    <input type="password" onChange={e => this.handleFieldChange('password')(e)} value={password} />
-                </div>
-                <div>
-                    <input type="button" onClick={this.login} value="Log in" disabled={!email || !password} />
-                    o
-                    <input type="button" onClick={this.signup} value="Sign up" disabled={!email || !password} />
-                </div>
-                {message && <span>{message}</span>}
             </div>
         );
     }

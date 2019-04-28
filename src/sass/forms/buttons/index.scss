@@ -1,0 +1,21 @@
+//buttons
+@import './save.scss';
+@import './back.scss';
+@import './delete.scss';
+@import './edit.scss';
+@import './link.scss';
+@import './logout.scss';
+
+.button {
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:12px;
+	font-weight:bold;
+	padding:3px 10px;
+	text-decoration:none;
+}

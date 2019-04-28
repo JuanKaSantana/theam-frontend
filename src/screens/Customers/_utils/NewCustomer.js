@@ -64,18 +64,18 @@ class NewCustomer extends Component {
         const { customer, loading, error, } = this.state;
 
         return (
-            <div>
-                NEW CUSTOMER
-                <div>
-                    <div>
+            <div className="container">
+                <h1 className="page-header">New Customer Form</h1>
+                <div className="form-container">
+                    <div className="input-container">
                         <label>Id</label>
                         <input type="text" onChange={e => this.changeField('id')(e)} value={customer.id || ''} />
                     </div>
-                    <div>
+                    <div className="input-container">
                         <label>Name</label>
                         <input type="text" onChange={e => this.changeField('name')(e)} value={customer.name || ''} />
                     </div>
-                    <div>
+                    <div className="input-container">
                         <label>Surname</label>
                         <input type="text" onChange={e => this.changeField('surname')(e)} value={customer.surname || ''} />
                     </div>
@@ -85,8 +85,8 @@ class NewCustomer extends Component {
                         )
                     }
                     <div>
-                        <button onClick={this.save}>Save</button>
-                        <Link to="/customers">Back</Link>
+                        <button className="button save" onClick={this.save}>Save</button>
+                        <Link to="/customers" className="button back">Back</Link>
                     </div>
                 </div>
                 {loading && <span>Loading</span>}

@@ -18,7 +18,7 @@ class NewUser extends Component {
         const token = window.localStorage.getItem('x-token');
         const admin = window.localStorage.getItem('x-admin');
         const { history: { replace } } = this.props;
-        
+
         if (admin === 'false') {
             window.localStorage.clear();
             return replace('/login');
@@ -51,24 +51,24 @@ class NewUser extends Component {
     render() {
         const { user, loading, error } = this.state;
         return (
-            <div>
-                NEW USER
-                <div>
-                    <div>
+            <div className="container">
+                <h1 className="page-header">New User Form</h1>
+                <div className="form-container">
+                    <div className="input-container">
                         <label>Email</label>
                         <input type="email" onChange={e => this.changeField('email')(e)} value={user.email || ''} />
                     </div>
-                    <div>
+                    <div className="input-container">
                         <label>Password</label>
                         <input type="password" onChange={e => this.changeField('password')(e)} value={user.password || ''} />
                     </div>
                     <div>
-                        <button onClick={this.save} disabled={!user.email || !user.password}>Save</button>
-                        <Link to="/users">Back</Link>
+                        <button className="button save" onClick={this.save} disabled={!user.email || !user.password}>Save</button>
+                        <Link to="/users" className="button back">Back</Link>
                     </div>
                 </div>
-                { loading && <span>Loading</span> }
-                { error && <span>{error}</span> }
+                {loading && <span>Loading</span>}
+                {error && <span>{error}</span>}
             </div>
         );
     }

@@ -46,7 +46,7 @@ class ImageUploader extends Component {
                         type="file"
                         onChange={(e) => this._handleImageChange(e)} />
                 </form>
-                <div className="imgPreview" style={{ width: 200, height: 200  }}>
+                <div className="imgPreview">
                     {$imagePreview}
                 </div>
             </div>

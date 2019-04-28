@@ -40,10 +40,10 @@ class Customers extends Component {
             headers.unshift('Image')
         }
         return (
-            <div>
-                <h1>Customers</h1>
-                {admin && admin === 'true' && <Link to="/users">Users</Link>}
-                <Link to="/customers/new">New Customer</Link>
+            <div className="container">
+                <h1 className="page-header">Customers</h1>
+                {admin && admin === 'true' && <Link to="/users" className="button link">Users</Link>}
+                <Link className="button link" to="/customers/new">New Customer</Link>
                 <Logout history={history}/>
                 {
                     isFetching && <h3>Loading</h3>
