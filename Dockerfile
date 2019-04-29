@@ -1,7 +1,13 @@
+FROM node:9.5.0
 
-FROM node:8 as react-build
-RUN mkdir /usr/src/theam-frontend
-WORKDIR /usr/src/theam-frontend
-COPY . ./
-RUN yarn
-RUN yarn build
+WORKDIR /usr/src/app
+
+COPY package.json .
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 3000
+
+ENTRYPOINT ["npm", "start"]
