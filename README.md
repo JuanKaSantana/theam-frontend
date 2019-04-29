@@ -37,32 +37,39 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+# Starting with development
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Requirements
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- Backend: API services should be running, you can clone backend part [here](https://github.com/JuanKaSantana/theam-backend.git)
+- Node Package Manager: npm should be installed, you can download it [here](https://www.npmjs.com/)
 
-### Code Splitting
+## Starting the App
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+### You have to do this steps on a bash terminal.
 
-### Analyzing the Bundle Size
+- Step 1: `git clone https://github.com/JuanKaSantana/theam-frontend.git`
+- Step 2: `cd theam-frontend`
+- Step 3: `npm install` - It probably takes some minutes
+- Step 5: `npm start` - You can open your app in your browser [here](https://localhost:3000)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+**Congrats!** Now you should have your App running. You can open it [here](https://localhost:3000)
 
-### Making a Progressive Web App
+**Note:** You will have to login into the app using admin@admin.com as email and admin as password
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+# Production deployment
 
-### Advanced Configuration
+## Requirements
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+- Docker: Docker have to be installed to deploy the app. You can download it [here](https://www.docker.com/)
+- Docker Compose: docker-compose have to be installed to deploy the frontend and backend part together. You can download it [here](https://docs.docker.com/compose/install/)
 
-### Deployment
+### You have to do this steps on a bash terminal.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+- Step 1: `git clone https://github.com/JuanKaSantana/theam-frontend.git`
+- Step 2: `cd theam-frontend`
+- Step 3: `docker-compose up` - It probably takes some minutes.
 
-### `npm run build` fails to minify
+**Congrats!** Now you should have your App deployed. You can open it [here](https://localhost:3000)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+**Note:** You will have to login into the app using admin@admin.com as email and admin as password
